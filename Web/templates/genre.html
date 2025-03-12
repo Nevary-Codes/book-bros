@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Books by Genre</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background-color: #f9f5ff;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+        color: #6b46c1;
+      }
+
+      .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .book-card {
+        background-color: #f4e9ff;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .book-card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
+
+      .book-card h3 {
+        font-size: 18px;
+        color: #333;
+      }
+
+      .book-card p {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .back-link {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        font-size: 16px;
+        color: #6b46c1;
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Books in Genre: {{ genre.capitalize() }}</h1>
+      <a href="{{ url_for('chat')}}">Chat</a>
+    </div>
+
+    <div class="book-grid">
+      {% for book in books %}
+    <a href="{{ url_for('book_detail', genre=genre, book_id=book) }}">
+      <div class="book-card">
+        <img src="{{ books[book].thumbnail }}" alt="{{ books[book].title }}" />
+        <h3>{{ books[book].title }}</h3>
+        <p>Author: {{ books[book].author }}</p>
+        <!-- <p>Price: ${{ book.price }}</p> -->
+      </div>
+    </a>
+      {% endfor %}
+    </div>
+
+    <a href="{{ url_for('home') }}" class="back-link">← Back to Home</a>
+  </body>
+</html>

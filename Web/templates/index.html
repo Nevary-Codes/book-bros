@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard UI</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background-color: #f9f5ff;
+        color: #333;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        background-color: #f4e9ff;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .sidebar button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background-color: transparent;
+        cursor: pointer;
+      }
+
+      .sidebar button:hover {
+        background-color: #e9d3ff;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .welcome {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .genres,
+      .for-you {
+        margin-bottom: 30px;
+      }
+
+      .genres-title,
+      .for-you-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .genres-list {
+        display: flex;
+        gap: 10px;
+      }
+
+      .genre-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #ddd;
+      }
+
+      .for-you-list {
+        display: flex;
+        gap: 20px;
+      }
+
+      .for-you-card {
+        width: 150px;
+        height: 100px;
+        border-radius: 20px;
+        background-color: #ddd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      .for-you-card span {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: #fff;
+        border-radius: 50%;
+        padding: 5px 10px;
+      }
+
+      .card-title {
+        margin-top: 10px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <button>Home</button>
+        <button>Discover</button>
+        <button>Publish</button>
+        <button>Settings</button>
+      </div>
+
+      <div class="main-content">
+        <div class="welcome">Welcome Aryan</div>
+
+        <div class="genres">
+          <div class="genres-title">Genres</div>
+          <div class="genres-list">
+            <div class="genre-item">
+              <a href="{{ url_for('books_by_genre', genre='fiction') }}"
+                >Fiction</a
+              >
+            </div>
+            <div class="genre-item">
+              <a href="{{ url_for('books_by_genre', genre='horror') }}"
+                >Horror</a
+              >
+            </div>
+            <div class="genre-item">
+              <a href="{{ url_for('books_by_genre', genre='comedy') }}"
+                >Comedy</a
+              >
+            </div>
+            <div class="genre-item">
+              <a href="{{ url_for('books_by_genre', genre='thriller') }}"
+                >Thriller</a
+              >
+            </div>
+            <div class="genre-item">
+              <a href="{{ url_for('books_by_genre', genre='nonfiction') }}"
+                >Non-Fiction</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="for-you">
+          <div class="for-you-title">For You</div>
+          <div class="for-you-list">
+            <div class="for-you-card">
+              <span>1st</span>
+            </div>
+            <div class="for-you-card">
+              <span>2nd</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
