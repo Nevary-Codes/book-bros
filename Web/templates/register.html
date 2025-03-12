@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f9f5ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .auth-container {
+      width: 400px;
+      background-color: #f4e9ff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .auth-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .auth-container form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .auth-container input {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .auth-container button {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #6b46c1;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .auth-container button:hover {
+      background-color: #5a38a1;
+    }
+
+    .auth-container .switch {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .auth-container .switch a {
+      color: #6b46c1;
+      text-decoration: none;
+    }
+
+    .auth-container .switch a:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <body>
+    <div class="auth-container" id="register-container">
+      <h2>Register</h2>
+      <!-- <form method="POST">
+          <input type="text" placeholder="Username" required />
+          <input type="email" placeholder="Email" required />
+          <input type="password" placeholder="Password" required />
+          <input type="password" placeholder="Confirm Password" required />
+          <button type="submit">Register</button>
+        </form> -->
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+          {{ form.username.label }}<br />
+          {{ form.username(size=32, placeholder="Username") }}
+        </div>
+        <div>
+          {{ form.email.label }}<br />
+          {{ form.email(size=32, placeholder="Email") }}
+        </div>
+        <div>
+          {{ form.password.label }}<br />
+          {{ form.password(size=32, placeholder="Password") }}
+        </div>
+        <div>
+          {{ form.confirm.label }}<br />
+          {{ form.confirm(size=32, placeholder="Confirm Password") }}
+        </div>
+        {% for field in form.errors %} {% for error in form.errors[field] %}
+        <p class="error">{{ error }}</p>
+        {% endfor %} {% endfor %}
+        <button type="submit">{{ form.submit.label }}</button>
+      </form>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <p class="{{ category }}">{{ message }}</p>
+      {% endfor %} {% endif %} {% endwith %}
+      <div class="switch">
+        Already have an account?
+        <a href="{{ url_for('login') }}" onclick="">Login</a>
+      </div>
+    </div>
+  </body>
+</html>
