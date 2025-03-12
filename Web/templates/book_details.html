@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f5ff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .book-container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .book-container img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .book-container h2 {
+            margin: 15px 0;
+        }
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #6b46c1;
+        }
+        .reviews-container {
+            margin-top: 30px;
+        }
+        .review-list {
+            list-style: none;
+            padding: 0;
+        }
+        .review-item {
+            background: #f4e9ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .review-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .review-form button {
+            background: #6b46c1;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <img src="{{ book.thumbnail }}" alt="{{ book.title }} Thumbnail">
+        <h2>{{ book.title }}</h2>
+        <p><strong>Publisher:</strong> {{ book.publisher }}</p>
+        <p><strong>Published Date:</strong> {{ book.published_date }}</p>
+        <p class="price">${{ book.price }}</p>
+        <p>{{ book.description }}</p>
+        
+        <div class="reviews-container">
+            <h3>Customer Reviews</h3>
+            <ul class="review-list">
+                {% for review in reviews %}
+                    <li class="review-item">{{ review.content }} - {{ review.author }}</li>
+                {% endfor %}
+            </ul>
+            <div class="review-form">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.review_text(rows=3, placeholder="Write a review...") }}
+                    <button type="submit">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
