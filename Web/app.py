@@ -98,16 +98,16 @@ class ReviewForm(FlaskForm):
 @app.route('/home/<string:genre>/<book_id>', methods=['GET', 'POST'])
 def book_detail(book_id, genre):
     books = get_books(genre)
-    book = books.get(int(book_id))  # Fetch the book from the dictionary
+    book = books.get(int(book_id))
     print(book)
     if not book:
         flash("Book not found!", "danger")
-        return redirect(url_for('books_by_genre', genre=genre))  # Redirect to home or book list page
+        return redirect(url_for('books_by_genre', genre=genre))
 
     form = ReviewForm()
 
     if form.validate_on_submit():
-        new_review = {"content": form.review_text.data, "author": "Anonymous"}  # Replace with logged-in user
+        new_review = {"content": form.review_text.data, "author": "Anonymous"}
         reviews.setdefault(book_id, []).append(new_review)
         flash("Review submitted successfully!", "success")
         return redirect(url_for('book_detail', book_id=book_id))
@@ -115,7 +115,6 @@ def book_detail(book_id, genre):
     return render_template("book_details.html", book=book, reviews=reviews.get(book_id, []), form=form)
 
 
-# WebSocket Handling
 @socketio.on("message")
 def handle_message(msg):
     if current_user.is_authenticated:
