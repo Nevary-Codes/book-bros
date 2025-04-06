@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nevary Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=B612&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: "B612", sans-serif;
+        color: white;
+        position: relative;
+        min-height: 100vh;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("https://i.postimg.cc/rs8smq2Q/Copy-of-Book-Bro-Website-1.webp")
+          no-repeat center center/cover;
+        z-index: -2;
+        filter: brightness(1);
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: -1;
+      }
+
+      .container {
+        display: flex;
+        height: 100vh;
+        backdrop-filter: blur(5px);
+      }
+
+      .sidebar {
+        width: 260px;
+        background: rgba(41, 28, 17, 0.75);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
+      }
+
+      .sidebar h2 {
+        font-size: 28px;
+        margin-bottom: 25px;
+        text-align: center;
+      }
+
+      .sidebar button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 12px 0;
+        padding: 12px 20px;
+        background-color: #a97458;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .sidebar button:hover {
+        background-color: #8c5c3f;
+        transform: translateX(5px);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        padding: 30px;
+        overflow-y: auto;
+      }
+
+      .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 15px 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .top-bar h1 {
+        font-size: 36px;
+        font-weight: bold;
+      }
+
+      .top-bar nav a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s;
+      }
+
+      .top-bar nav a:hover {
+        color: #f0c49b;
+      }
+
+      .section-title {
+        background-color: rgba(92, 64, 51, 0.8);
+        padding: 10px 25px;
+        border-radius: 25px;
+        display: inline-block;
+        margin: 20px 0 10px;
+        font-size: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .genres,
+      .books,
+      .authors {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .genre,
+      .book,
+      .author {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 15px;
+        width: 120px;
+        transition: transform 0.3s, background-color 0.3s;
+      }
+
+      .genre:hover,
+      .book:hover,
+      .author:hover {
+        transform: scale(1.05);
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      .genre img,
+      .book img,
+      .author img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 2px solid white;
+        transition: transform 0.3s ease;
+      }
+
+      .genre p,
+      .book p,
+      .author p {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="sidebar">
+        <h2>Welcome <strong>{{ username }}</strong></h2>
+        <button onclick="window.location.href='/author_home'">
+          Home Page <i class="fas fa-home"></i>
+        </button>
+        <button onclick="window.location.href='/upcoming_webinars'">
+          Upcoming Talk Shows <i class="fas fa-clock"></i>
+        </button>
+        <button onclick="window.location.href='/schedule_webinar'">
+          Schedule a Talk Show <i class="fas fa-calendar-alt"></i>
+        </button>
+        <button onclick="window.location.href='{{ url_for('author_books', author_id=username) }}'">
+          Your Books <i class="fas fa-book"></i>
+        <button onclick="window.location.href='/publish_book'">Publish a Book <i class="fas fa-feather-alt"></i></button>
+        <button onclick="window.location.href='/logout'">Log Out <i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+
+      <div class="main-content">
+        <div class="top-bar">
+          <h1>Welcome {{ username }}</h1>
+          <nav>
+            <a href="#">About Us</a>
+            <a href="#">Contact Us</a>
+            <i class="fas fa-user-circle fa-2x"></i>
+          </nav>
+        </div>
+
+        <div class="section-title">GENRES</div>
+        <div class="genres">
+          {% for genre in genres %}
+          <div class="genre">
+            <img src="static/images/{{ genres[genre][1] }}" />
+            <a href="{{ url_for('books_by_genre', genre=genres[genre][0]) }}"
+              >{{ genres[genre][0] }}</a
+            >
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="section-title">FOR YOU</div>
+        <div class="books">
+          {% for book in books %}
+          <a href="{{ url_for('author_book_detail', book_id=book|int) }}">
+            <div class="book">
+              <img
+                src="{{ books[book][2] }}"
+                alt="{{ books[book][0] }}"
+              />
+              <h3>{{ books[book][0] }}</h3>
+              <p>Author: {{ books[book][1] }}</p>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+        <div class="section-title">AUTHORS</div>
+        <div class="authors">
+          {% for author in authors %}
+
+          <a href="{{ url_for('author_detail', author_id=authors[author][0]) }}">
+            <div class="author">
+              <img
+                src="static/images/{{ authors[author][2] }}"
+                alt="{{ authors[author][0] }}"
+              />
+              <h3>{{ authors[author][0] }}</h3>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

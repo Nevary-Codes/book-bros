@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Author Details</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=B612&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "B612", sans-serif;
+      }
+
+      body {
+        background-image: url("https://i.postimg.cc/TPD3XG2c/Copy-of-Book-Bro-Website-1.webp");
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(3px);
+        z-index: 0;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        padding: 15px 30px;
+        z-index: 2;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .title-slip {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        color: #2c1b13;
+        padding: 10px 20px;
+        border-radius: 0 0 8px 0;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+      }
+
+      .author-container {
+        background-color: rgba(44, 27, 19, 0.85);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        max-width: 400px;
+        height: 500px;
+        color: #fff;
+        z-index: 1;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .author-container img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        border: 3px solid #fff;
+      }
+
+      .author-container h2 {
+        margin-bottom: 10px;
+        font-size: 24px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .author-info {
+        margin-top: 10px;
+        font-size: 16px;
+        line-height: 1.6;
+        width: 100%;
+        text-align: left;
+      }
+
+      .author-info span {
+        font-weight: bold;
+        color: #f4d6a0;
+      }
+
+      .author-info button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #f4d6a0;
+        color: #2c1b13;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .author-info button:hover {
+        background-color: #eac88c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title-slip">About the Author</div>
+    <div class="navbar">
+      {% if isAuth %}
+      <a href="{{ url_for('author_home') }}">Home</a>
+      {% else %}
+      <a href="{{ url_for('home') }}">Home</a>
+      {% endif %}
+      <a href="#">About Us</a>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="author-container">
+      <img
+        src="{{ url_for('static', filename='images/'+author.profile_image) }}"
+        alt="Author Photo"
+      />
+      <h2>{{ author.id }}</h2>
+      <div class="author-info">
+        <p><span>Genre:</span> Mystery, Thriller, Fiction</p>
+        <p><span>Date of Birth:</span> April 10, 1980</p>
+        <p><span>Origin:</span> Boston, USA</p>
+        <button onclick="window.location.href='{{ url_for('author_books', author_id=author.id) }}'">Author Books</button>
+      </div>
+    </div>
+  </body>
+</html>

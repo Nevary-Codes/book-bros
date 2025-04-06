@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin - User Details</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=B612&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "B612", sans-serif;
+      }
+
+      body {
+        background: url("https://i.postimg.cc/TPD3XG2c/Copy-of-Book-Bro-Website-1.webp")
+          no-repeat center center/cover;
+        min-height: 100vh;
+        position: relative;
+        padding-bottom: 50px;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(3px);
+        z-index: 0;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        padding: 15px 30px;
+        z-index: 2;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .page-title {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        color: #2c1b13;
+        padding: 10px 20px;
+        border-radius: 0 0 8px 0;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+      }
+
+      .container {
+        margin-top: 80px;
+        padding: 40px;
+        z-index: 1;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .user-card {
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .user-info {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .user-info h3 {
+        margin-bottom: 5px;
+      }
+
+      .user-info p span {
+        font-weight: bold;
+        color: #fddc9c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-title">All Users</div>
+    <div class="navbar">
+      <a href="{{ url_for('admin') }}">Dashboard</a>
+      <a href="#">Logout</a>
+    </div>
+
+    <div class="container">
+      {% for i in users %} {% if not i.is_admin %}
+      <div class="user-card">
+        <div class="user-info">
+          <h3><span>Username:</span> {{ i.id }}</h3>
+          <p><span>Email:</span> {{ i.email }}</p>
+          {% if i.is_premium %}
+          <p><span>Premium Member:</span> Yes</p>
+          {% else %}
+          <p><span>Premium Member:</span> No</p>
+          {% endif %}
+        </div>
+        <button
+      type="submit"
+      onclick="window.location.href='{{ url_for('block_user', user_id=i.id) }}'"
+      style="
+        background-color: #e53935;
+        color: white;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      "
+      onmouseover="this.style.backgroundColor='#c62828'"
+      onmouseout="this.style.backgroundColor='#e53935'"
+    >
+      Block User
+    </button>
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+  </body>
+</html>

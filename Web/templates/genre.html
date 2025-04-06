@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fiction Books</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=B612&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "B612", sans-serif;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      body,
+      html {
+        height: 100%;
+      }
+
+      .bg {
+        background-image: url("{{ url_for('static', filename='images/'+genreImg) }}");
+        background-size: cover;
+        background-position: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+      }
+
+      .bg::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .overlay {
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        background-color: rgba(111, 78, 55, 0.95);
+        color: #fff3e0;
+        padding: 30px 40px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        font-size: 2em;
+        font-weight: 700;
+        font-style: italic;
+        text-shadow: 2px 2px 5px #00000066;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .navbar {
+        width: 100%;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 60px;
+        padding: 0 60px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 1.4em;
+        z-index: 10;
+      }
+
+      .navbar a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        padding: 10px 15px;
+      }
+
+      .navbar a:hover {
+        color: #ffddaa;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+
+      .book-container {
+        margin-top: 160px;
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .book-card {
+        width: 170px;
+        /* background-color: rgba(255, 255, 255, 0.85); */
+        border-radius: 10px;
+        overflow: hidden;
+        text-align: center;
+        box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s;
+        color: white;
+      }
+
+      .book-card:hover {
+        transform: scale(1.06);
+      }
+
+      .book-cover {
+        height: 220px;
+        width: 100%;
+      }
+
+      .book-info {
+        padding: 12px;
+      }
+
+      .book-title {
+        font-weight: bold;
+        font-size: 1em;
+        color: #333;
+      }
+
+      .book-author {
+        font-size: 0.9em;
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="overlay">
+      <div class="navbar">
+        {% if isAuth %}
+        <a href="{{ url_for('author_home') }}">← Back to Home</a>
+        {% else %}
+        <a href="{{ url_for('home') }}">← Back to Home</a>
+        {% endif %}
+        <a href="{{ url_for('chat', genre=genre) }}">Chat Room</a>
+        <a href="#">Contact Us</a>
+      </div>
+
+      <div class="sidebar">{{ genre }} Books</div>
+
+      <div class="book-container">
+        {% for book in books %}
+        <a href="{{ url_for('book_detail', genre=genre, book_id=book|int) }}">
+          <div class="book-card">
+            <img
+              src="{{ books[book].thumbnail }}"
+              alt="{{ books[book].title }}"
+            />
+            <h3>{{ books[book].title }}</h3>
+            <p>Author: {{ books[book].author }}</p>
+
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

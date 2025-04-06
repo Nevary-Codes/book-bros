@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard UI</title>
+    <style>
+      * {
+        color: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background-color: black;
+        color: #333;
+      }
+
+      .bg-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("static/image.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.5; /* Adjust transparency */
+        z-index: -1;
+      }
+      
+      a {
+        text-decoration: none;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        /* background-color: #f4e9ff; */
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .sidebar button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background-color: transparent;
+        cursor: pointer;
+      }
+
+      .sidebar button:hover {
+        background-color: #e9d3ff;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .welcome {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .genres,
+      .for-you {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Align content to the left */
+        width: 100%;
+      }
+
+      .genres-title,
+      .for-you-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        margin-left: 10px; /* Aligns with the list */
+      }
+
+      .genres-list {
+        display: flex;
+        gap: 2vw; /* Responsive spacing */
+        flex-wrap: wrap; /* Ensures items adjust to smaller screens */
+      }
+
+      .genre-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 12vw; /* Responsive width */
+        height: 12vw;
+        max-width: 120px;
+        max-height: 120px;
+        border-radius: 50%;
+        font-size: 1rem;
+        text-align: center;
+        transition: background 0.4s ease-in-out, transform 0.3s ease-in-out;
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Background images for hover */
+      .genre-item:hover {
+        transform: scale(1.1); /* Slightly enlarges on hover */
+      }
+
+      /* Different background images for each genre */
+      .genre-item:nth-child(1):hover {
+        background: url("static/fiction.webp") center/cover no-repeat;
+      }
+
+      .genre-item:nth-child(2):hover {
+        background: url("static/horror.webp") center/cover no-repeat;
+      }
+
+      .genre-item:nth-child(3):hover {
+        background: url("static/comedy.webp") center/cover no-repeat;
+      }
+
+      .genre-item:nth-child(4):hover {
+        background: url("static/thriller.webp") center/cover no-repeat;
+      }
+
+      .genre-item:nth-child(5):hover {
+        background: url("static/nonfiction.webp") center/cover no-repeat;
+      }
+
+      /* Animation effect */
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .genre-item:hover {
+        animation: fade-in 0.5s ease-in-out;
+      }
+
+      /* .for-you-list {
+        display: flex;
+        gap: 3vw;
+        flex-wrap: wrap;
+      }
+
+      .for-you-card {
+        width:20px;
+        height: 50px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 20vw;
+        height: 15vw;
+        max-width: 200px;
+        max-height: 150px;
+        border-radius: 20px;
+        background-color: #ddd;
+        display: flex;
+        justify-content: left;
+        align-items: end;
+        position: relative;
+        font-size: 1.2rem;
+      } */
+
+      .for-you-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* Space between cards */
+        justify-content: flex-start; /* Aligns cards with title */
+        width: 100%;
+      }
+
+      .for-you-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Centers content vertically */
+        align-items: center;
+        width: 180px;
+        height: 260px;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .for-you-card img {
+        width: 100%;
+        height: auto; /* Keeps image proportional */
+        max-height: 75%; /* Ensures image doesn't take too much space */
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      .for-you-card h3 {
+        margin: 5px 0 0 0; /* Removes excessive margin below the image */
+        font-size: 14px;
+        color: white;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .for-you-list {
+          gap: 10px;
+        }
+
+        .for-you-card {
+          width: 140px;
+          height: 220px;
+        }
+      }
+
+      /* Make text inside genre icons and cards adapt */
+      .for-you-card span {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: #fff;
+        border-radius: 50%;
+        padding: 0.5em 1em; /* Adjusts size */
+        font-size: 0.8rem;
+      }
+
+      /* Responsive adjustments for smaller screens */
+      @media (max-width: 768px) {
+        .genre-item {
+          width: 16vw; /* Slightly larger on small screens */
+          height: 16vw;
+        }
+
+        .for-you-card {
+          width: 40vw; /* Larger cards on mobile */
+          height: 30vw;
+        }
+      }
+
+      /* Further adjustments for very small screens */
+      @media (max-width: 480px) {
+        .genre-item {
+          width: 20vw;
+          height: 20vw;
+          font-size: 0.9rem;
+        }
+
+        .for-you-card {
+          width: 45vw;
+          height: 35vw;
+          font-size: 1rem;
+        }
+      }
+
+      .card-title {
+        margin-top: 10px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-overlay"></div>
+    <div class="container">
+      <div class="sidebar">
+        <div style="height: 25px"></div>
+        <button>Home</button>
+        <button onclick="window.location.href='/user_webinars'">
+          Upcoming Webinars
+        </button>
+        <button>Subscribe for Premium</button>
+        <button onclick="window.location.href='/logout'">Log Out</button>
+      </div>
+
+      <div class="main-content">
+        <div class="welcome">Welcome {{ username }}</div>
+
+        <div class="genres">
+          <div class="genres-title">Genres</div>
+          <div class="genres-list">
+            {% for genre in genres %}
+            <div class="genre-item">
+              <a href="{{ url_for('books_by_genre', genre=genres[genre][0]) }}"
+                >{{ genres[genre][0] }}</a
+              >
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="for-you">
+          <div class="for-you-title">For You</div>
+          <div class="for-you-list">
+            {% for book in books %}
+            <!-- <div class="for-you-card", style="background-image: url('{{ books[book][2] }}');">
+                <h4>{{ books[book][0] }}</h4>
+              </div> -->
+            <a href="{{ url_for('author_book_detail', book_id=book|int) }}">
+              <div class="for-you-card">
+                <img
+                  src="{{ books[book].image_url }}"
+                  alt="{{ books[book].title }}"
+                />
+                <h3>{{ books[book].title }}</h3>
+                <p>Author: {{ books[book].author_id }}</p>
+                <!-- <p>Price: ${{ book.price }}</p> -->
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="for-you">
+          <div class="for-you-title">Authors</div>
+          <div class="for-you-list">
+            {% for author in authors %}
+
+            <a href="">
+              <div class="for-you-card">
+                <img
+                  src="{{ authors[author][2] }}"
+                  alt="{{ authors[author][0] }}"
+                />
+                <h3>{{ authors[author][0] }}</h3>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

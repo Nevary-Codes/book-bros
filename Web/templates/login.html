@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Bro - Login</title>
+    <link rel="stylesheet" href="static/css/login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=B612&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+      body {
+        background: url("static/images/bookshelf-background.jpg.jpg") no-repeat
+          center center/cover;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        font-family: 'B612'
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <!-- Replace src with your logo path -->
+        <img src="static/images/logo.png" alt="Book Bro Logo" style="width: 100px; height: 60px;"/>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">User</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="left">
+        <h1 style="text-align: center">Book<br />Bro</h1>
+        <p class="tagline" style="text-align: center">Your Reading Partner</p>
+        <br />
+        <!-- Replace src with your open book image -->
+        <img
+          src="static/images/open-book.png"
+          alt="Open Book"
+          class="book-image"
+        />
+      </section>
+
+      <section class="login-card">
+        <h2>Login</h2>
+        <form method="POST">
+          {{ form.hidden_tag() }}
+            {{ form.username.label }}
+            {{ form.username(size=32, placeholder="Username") }}
+
+            {{ form.password.label }}
+            {{ form.password(size=32, placeholder="Password") }}
+
+          {% for error in form.username.errors %}
+          <p class="error">{{ error }}</p>
+          {% endfor %} {% for error in form.password.errors %}
+          <p class="error">{{ error }}</p>
+          {% endfor %}
+          <button type="submit">{{ form.submit.label }}</button>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <div class="register-links">
+          <p>Don’t have an account?<br /><a href="{{ url_for('register') }}">Register Here!</a></p>
+          <p>
+            Want to register as an Author?<br /><a href="{{ url_for('author_register') }}">Register Here!</a>
+          </p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

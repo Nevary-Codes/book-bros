@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Schedule A Talk Show</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=B612&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "B612", sans-serif;
+      }
+
+      body {
+        background-image: url("https://i.postimg.cc/TPD3XG2c/Copy-of-Book-Bro-Website-1.webp");
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Background blur overlay */
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        backdrop-filter: blur(3px);
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 0;
+      }
+
+      .form-container {
+        position: relative;
+        background-color: rgba(44, 27, 19, 0.85);
+        padding: 30px;
+        border-radius: 20px;
+        width: 420px;
+        color: white;
+        z-index: 1;
+      }
+
+      .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 22px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        background-color: #d8b98c;
+        color: #2d1b13;
+        font-size: 14px;
+      }
+
+      .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        background-color: white;
+        color: #2d1b13;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .back-home {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 2;
+      }
+
+      .back-home a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 10px 18px;
+        border-radius: 30px;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+      }
+
+      .back-home a:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Schedule A Talk Show</h2>
+      <form action="{{ url_for('schedule_webinar') }}" method="POST">
+        <div class="form-group">
+          <label>Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Title"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            rows="2"
+            placeholder="Description"
+            id="description"
+            name="description"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label>Date and Time</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+        <div class="form-group">
+          <label>Duration (in minutes)</label>
+          <input
+            type="number"
+            placeholder="Duration"
+            id="duration"
+            name="duration"
+            min="1"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Genre</label>
+          <select id="genre" name="genre">
+            <option disabled selected>Eg. Fiction</option>
+            <option>Fiction</option>
+            <option>Non-Fiction</option>
+            <option>Biography</option>
+            <option>Mystery</option>
+            <option>Fantasy</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">SCHEDULE</button>
+      </form>
+    </div>
+
+    <div class="back-home">
+      <a href="{{ url_for('author_home') }}">← Back to Home</a>
+    </div>
+  </body>
+</html>

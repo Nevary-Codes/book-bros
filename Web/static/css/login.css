@@ -1,0 +1,122 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+  }
+  
+  .logo img {
+    height: 50px;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.2rem;
+  }
+  
+  main {
+    display: flex;
+    justify-content: space-between;
+    padding: 4rem 6rem;
+    flex: 1;
+  }
+  
+  .left {
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .left h1 {
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+  
+  .tagline {
+    background-color: #5f3c25;
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1.25rem;
+    margin-top: 1rem;
+  }
+  
+  .book-image {
+    width: 300px;
+    height: 200px;
+    margin-top: 2rem;
+  }
+  
+  .login-card {
+    background: rgba(69, 44, 29, 0.85);
+    padding: 2.5rem;
+    border-radius: 20px;
+    width: 360px;
+    height: 550px;
+  }
+  
+  .login-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .login-card label {
+    display: block;
+    margin: 1rem 0 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .login-card input {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+  
+  .login-card button {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #d3b685;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .register-links {
+    margin-top: 2rem;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .register-links a {
+    color: #d3b685;
+    text-decoration: none;
+    font-weight: bold;
+  }
