@@ -432,61 +432,30 @@ def read_book(book_id):
         if genres[i][0] == book.genre:
             genreImg = genres[i][1]
 
-    if current_user.__class__.__name__ == "User":
-        if current_user.is_admin or current_user.is_premium:
 
-            file_path = book.file_path  # Example: 'static/uploads/CSET_207_Lab_Assignment_Week_8.pdf'
-            upload_folder = app.config['UPLOAD_FOLDER']  # Example: 'static/uploads'
-
-            # Extract filename from the file path
-            filename = os.path.basename(file_path)
-
-            # Debugging Prints
-            print(f"Book File Path: {file_path}")
-            print(f"Upload Folder: {upload_folder}")
-            print(f"Extracted Filename: {filename}")
-            print(f"Full Path Exists? {os.path.exists(file_path)}")  # Check if full path exists (relative to app root)
-            print(f"Final Path Exists? {os.path.exists(os.path.join(upload_folder, filename))}")  # Check expected directory
-
-            # Ensure the file exists in the upload folder
-            file_full_path = os.path.join(upload_folder, filename)
-            print(file_full_path)
-            if not os.path.exists(file_full_path):
-                
-                return redirect(url_for('home'))
-
-            # Serve the file from the directory without duplicating 'static/'
-            return send_from_directory(upload_folder, filename)
-    
-    else:
-        file_path = book.file_path  # Example: 'static/uploads/CSET_207_Lab_Assignment_Week_8.pdf'
-        upload_folder = app.config['UPLOAD_FOLDER']  # Example: 'static/uploads'
+    file_path = book.file_path  # Example: 'static/uploads/CSET_207_Lab_Assignment_Week_8.pdf'
+    upload_folder = app.config['UPLOAD_FOLDER']  # Example: 'static/uploads'
 
         # Extract filename from the file path
-        filename = os.path.basename(file_path)
+    filename = os.path.basename(file_path)
 
         # Debugging Prints
-        print(f"Book File Path: {file_path}")
-        print(f"Upload Folder: {upload_folder}")
-        print(f"Extracted Filename: {filename}")
-        print(f"Full Path Exists? {os.path.exists(file_path)}")  # Check if full path exists (relative to app root)
-        print(f"Final Path Exists? {os.path.exists(os.path.join(upload_folder, filename))}")  # Check expected directory
+    print(f"Book File Path: {file_path}")
+    print(f"Upload Folder: {upload_folder}")
+    print(f"Extracted Filename: {filename}")
+    print(f"Full Path Exists? {os.path.exists(file_path)}")  # Check if full path exists (relative to app root)
+    print(f"Final Path Exists? {os.path.exists(os.path.join(upload_folder, filename))}")  # Check expected directory
 
-            # Ensure the file exists in the upload folder
-        file_full_path = os.path.join(upload_folder, filename)
-        print(file_full_path)
-        if not os.path.exists(file_full_path):
-            
-            return redirect(url_for('home'))
-
-        # Serve the file from the directory without duplicating 'static/'
-        return send_from_directory(upload_folder, filename)
+        # Ensure the file exists in the upload folder
+    file_full_path = os.path.join(upload_folder, filename)
+    print(file_full_path)
+    if not os.path.exists(file_full_path):
+        
+        return redirect(url_for('home'))
 
 
+    return send_from_directory(upload_folder, filename)
 
-    if not current_user.is_premium:
-        print("You need to be a premium member to read this book.", "danger")
-        return render_template("author_book_details.html", book=book, genreImg=genreImg)
     
     
 

@@ -101,10 +101,10 @@
     </style>
   </head>
   <body>
-    <div class="page-title">All Users</div>
+    <div class="page-title">Blocked Users</div>
     <div class="navbar">
       <a href="{{ url_for('admin') }}">Dashboard</a>
-      <a href="#">Logout</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
     </div>
 
     <div class="container">
@@ -133,7 +133,7 @@
         transition: background-color 0.3s ease;
       "
     >
-      Block User
+      Unblock User
     </button>
       </div>
       {% endif %} {% endfor %}
