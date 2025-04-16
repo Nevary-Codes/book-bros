@@ -109,6 +109,20 @@ class Webinar(db.Model):
 
     def __repr__(self):
         return f'<Webinar {self.title}>'
+    
+
+class Card(db.Model):
+    __tablename__ = 'dummy_cards'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    cardholder_name = db.Column(db.String(100), nullable=False)
+    card_number = db.Column(db.String(20), unique=True, nullable=False)
+    expiry_date = db.Column(db.String(5), nullable=False)  # Format: MM/YY
+    cvv = db.Column(db.String(4), nullable=False)
+    balance = db.Column(db.Numeric(10, 2), default=1000.00)
+
+    def __repr__(self):
+        return f"<Card {self.cardholder_name} - {self.card_number}>"
 
 
 @login_manager.user_loader
@@ -312,21 +326,39 @@ def chat(genre):
 
     return render_template("chat.html", genre=genre, messages=messages_data, isAuth=isAuth)
 
-@app.route("/upgrade_to_premium", methods=["GET", "POST"])
-@login_required
-def upgrade_to_premium():
-    if request.method == 'POST':
-        current_user.is_premium = True
-        db.session.commit()
-        return redirect(url_for("home"))
-
-    return redirect(url_for("home"))
-
 @app.route("/premium")
 @login_required
 def premium():
     isPrem = current_user.is_premium
     return render_template('premium.html', isPrem=isPrem)
+
+@app.route("/payment", methods=["GET", "POST"])
+@login_required
+def payment():
+    if request.method == "POST":
+        name = request.form["cardholder"]
+        cardnumber = request.form["cardnumber"]
+        expiry = request.form["expiry"]
+        cvv = request.form["cvv"]
+
+        card = db.session.query(Card).filter_by(
+            card_number=cardnumber,
+            expiry_date=expiry,
+            cvv=cvv
+        ).first()
+
+        if card and card.balance >= 129:
+            card.balance -= 129
+            db.session.commit()
+            current_user.is_premium = True
+            db.session.commit()
+
+            flash("Payment successful! You've been upgraded to Premium.", "success")
+            return redirect(url_for("premium"))
+        else:
+            flash("Payment failed. Invalid card details or insufficient balance.", "error")
+
+    return render_template("payment.html")
 
 @app.route("/logout")
 @login_required
