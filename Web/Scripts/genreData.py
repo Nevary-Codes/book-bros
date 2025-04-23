@@ -1,4 +1,3 @@
-import pandas as pd
 from sqlalchemy import create_engine, MetaData, Table
 
 DATABASE_URI = 'mysql+pymysql://root:aryan2424@localhost/book_bros'

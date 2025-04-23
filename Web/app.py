@@ -14,11 +14,13 @@ from Scripts.bookData import get_books_genre
 from Scripts.genreData import get_genres
 from Scripts.booksData import get_books
 from Scripts.authorData import get_authors
-
+# 'mysql+pymysql://root:aryan2424@localhost/book_bros'
+# mysql+pymysql://remote_user:remote2424@103.47.74.66:3306/book_bros
+DATABASE_URL = "mysql+pymysql://root:aryan2424@localhost/book_bros"
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:aryan2424@localhost/book_bros'
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -123,6 +125,17 @@ class Card(db.Model):
 
     def __repr__(self):
         return f"<Card {self.cardholder_name} - {self.card_number}>"
+    
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.String(20), db.ForeignKey('user.id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+
+    user = db.relationship('User', backref='reviews')
+    book = db.relationship('Book', backref='reviews')
 
 
 @login_manager.user_loader
@@ -394,6 +407,16 @@ def author_books(author_id):
         isAuth=True
     return render_template('author_books.html', books=books, isAuth=isAuth)
 
+@app.route('/book/<int:book_id>/review', methods=['POST'])
+@login_required
+def add_review(book_id):
+    content = request.form['content']
+    rating = int(request.form['rating'])
+    review = Review(content=content, rating=rating, user_id=current_user.id, book_id=book_id)
+    db.session.add(review)
+    db.session.commit()
+    return redirect(url_for('author_book_detail', book_id=book_id))
+
 @app.route('/home/<string:genre>')
 def books_by_genre(genre):
     isAuth = False
@@ -488,15 +511,6 @@ def read_book(book_id):
 
     return send_from_directory(upload_folder, filename)
 
-    
-    
-
-reviews = {}
-
-class ReviewForm(FlaskForm):
-    review_text = TextAreaField('Write a review', validators=[DataRequired()])
-    submit = SubmitField('Submit Review')
-
 @app.route('/home/<string:genre>/<int:book_id>', methods=['GET', 'POST'])
 def book_detail(genre, book_id):
     books = get_books_genre(genre)
@@ -514,15 +528,9 @@ def book_detail(genre, book_id):
         
         return redirect(url_for('books_by_genre', genre=genre))
 
-    form = ReviewForm()
+    reviews = Review.query.filter_by(book_id=book_id).order_by(Review.timestamp.desc()).all()
 
-    if form.validate_on_submit():
-        new_review = {"content": form.review_text.data, "author": "Anonymous"}
-        reviews.setdefault(book_id, []).append(new_review)
-        
-        return redirect(url_for('book_details', genre=genre, book_id=book_id))
-
-    return render_template("book_details.html", book=book, reviews=reviews.get(book_id, []), form=form, genreImg=genreImg, isAuth=isAuth)
+    return render_template("book_details.html", book=book, reviews=reviews, genreImg=genreImg, isAuth=isAuth)
 
 @app.route('/<int:book_id>', methods=['GET', 'POST'])
 def author_book_detail(book_id):
@@ -536,16 +544,10 @@ def author_book_detail(book_id):
     if not book:
         
         return redirect(url_for('author_books'))
+    
+    reviews = Review.query.filter_by(book_id=book_id).order_by(Review.timestamp.desc()).all()
 
-    form = ReviewForm()
-
-    if form.validate_on_submit():
-        new_review = {"content": form.review_text.data, "author": "Anonymous"}
-        reviews.setdefault(book_id, []).append(new_review)
-        
-        return redirect(url_for('author_book_details', book_id=book_id, genreImg=genreImg))
-
-    return render_template("author_book_details.html", book=book, reviews=reviews.get(book_id, []), form=form, genreImg=genreImg)
+    return render_template("author_book_details.html", book=book, genreImg=genreImg, reviews=reviews)
 
 @app.route("/admin/verify_author/<string:author_id>")
 @login_required
