@@ -10,16 +10,17 @@ from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
-from Scripts.bookData import get_books_genre
+from Scripts.bookData import get_books_genre, get_books1
 from Scripts.genreData import get_genres
 from Scripts.booksData import get_books
 from Scripts.authorData import get_authors
-# 'mysql+pymysql://root:aryan2424@localhost/book_bros'
-# mysql+pymysql://remote_user:remote2424@103.47.74.66:3306/book_bros
+
 DATABASE_URL = "mysql+pymysql://root:aryan2424@localhost/book_bros"
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -417,17 +418,56 @@ def add_review(book_id):
     db.session.commit()
     return redirect(url_for('author_book_detail', book_id=book_id))
 
+# @app.route('/home/<string:genre>')
+# def books_by_genre(genre):
+#     isAuth = False
+#     if current_user.__class__.__name__ == "Author":
+#         isAuth = True
+#     books = get_books1(genre)
+#     genres = get_genres()
+#     for i, j in genres.items():
+#         if genres[i][0] == genre:
+#             genreImg = genres[i][1]
+#     return render_template('genre.html', genre=genre, books=books, genreImg=genreImg, isAuth=isAuth)
+
 @app.route('/home/<string:genre>')
 def books_by_genre(genre):
     isAuth = False
     if current_user.__class__.__name__ == "Author":
         isAuth = True
-    books = get_books_genre(genre)
+
+    # Get current page number from query params
+    page = request.args.get('page', 1, type=int)
+    books_per_page = 14  # Adjust this number as needed
+
+    all_books = get_books1(genre)  # full dict of books
+    total_books = len(all_books)
+
+    # Sort keys to ensure consistent order
+    book_keys = sorted(all_books.keys())
+
+    # Calculate paginated slice
+    start = (page - 1) * books_per_page
+    end = start + books_per_page
+    paginated_keys = book_keys[start:end]
+
+    # Filter only the books for the current page
+    paginated_books = {key: all_books[key] for key in paginated_keys}
+
     genres = get_genres()
-    for i, j in genres.items():
-        if genres[i][0] == genre:
-            genreImg = genres[i][1]
-    return render_template('genre.html', genre=genre, books=books, genreImg=genreImg, isAuth=isAuth)
+    genreImg = next((img for name, img in genres.values() if name == genre), None)
+
+    total_pages = (total_books + books_per_page - 1) // books_per_page
+
+    return render_template(
+        'genre.html',
+        genre=genre,
+        books=paginated_books,
+        genreImg=genreImg,
+        isAuth=isAuth,
+        page=page,
+        total_pages=total_pages
+    )
 
 @app.route("/publish_book", methods=["GET", "POST"])
 @login_required
@@ -530,7 +570,7 @@ def book_detail(genre, book_id):
 
     reviews = Review.query.filter_by(book_id=book_id).order_by(Review.timestamp.desc()).all()
 
-    return render_template("book_details.html", book=book, reviews=reviews, genreImg=genreImg, isAuth=isAuth)
+    return render_template("book_details.html", book=book, reviews=reviews, genreImg=genreImg, isAuth=isAuth, book_id=book_id)
 
 @app.route('/<int:book_id>', methods=['GET', 'POST'])
 def author_book_detail(book_id):

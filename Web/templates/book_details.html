@@ -130,65 +130,9 @@
       <p><strong>Publish Date:</strong>{{ book.published_date }}</p>
       <p><strong>Description:</strong>{{ book.description }}</p>
       <div class="buttons">
-        <button>Read</button>
-        <button
-          onclick="document.getElementById('reviews-section').scrollIntoView({ behavior: 'smooth' });"
-        >
-          Reviews
-        </button>
+        <button>Buy</button>
       </div>
     </div>
-    <div class="card" style="margin-top: 20px" id="reviews-section">
-      <h2>User Reviews</h2>
-
-      {% if current_user.is_authenticated %}
-      <form
-        action="{{ url_for('add_review', book_id=book.id) }}"
-        method="POST"
-        style="margin: 20px 0"
-      >
-        <textarea
-          name="content"
-          rows="4"
-          style="width: 100%; padding: 10px; border-radius: 5px;"
-          placeholder="Write your review..."
-          required
-        ></textarea
-        ><br />
-        <label for="rating">Rating: </label>
-        <select name="rating" required class="transparent-select">
-          <option value="5">⭐⭐⭐⭐⭐</option>
-          <option value="4">⭐⭐⭐⭐</option>
-          <option value="3">⭐⭐⭐</option>
-          <option value="2">⭐⭐</option>
-          <option value="1">⭐</option></select
-        ><br /><br />
-        <button type="submit" class="review-submit">Submit Review</button>
-      </form>
-      {% else %}
-      <p style="margin: 10px 0">
-        Please <a href="{{ url_for('login') }}">log in</a> to submit a review.
-      </p>
-      {% endif %} {% for review in reviews %}
-      <div
-        style="
-          margin-top: 15px;
-          border-top: 1px solid #fff3e0;
-          padding-top: 10px;
-        "
-      >
-        <p>
-          <strong>{{ review.user_id }}</strong><br />
-          Rated: {{ review.rating * '⭐️' }}
-        </p>
-        <p>{{ review.content }}</p>
-        <small style="color: #ccc"
-          >{{ review.timestamp.strftime('%Y-%m-%d %H:%M') }}</small
-        >
-      </div>
-      {% else %}
-      <p>No reviews yet.</p>
-      {% endfor %}
-    </div>
+    
   </body>
 </html>

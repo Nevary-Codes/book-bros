@@ -1,6 +1,9 @@
+import ast
 import requests
-
+from sqlalchemy import create_engine, MetaData, Table
+import random
 # API URL for Thriller books
+DATABASE_URI = 'mysql+pymysql://root:aryan2424@localhost/book_bros'
 
 def get_books_genre(genre = "thriller"):
     url = f"https://www.googleapis.com/books/v1/volumes?q=subject:{genre}&maxResults=40"
@@ -34,3 +37,33 @@ def get_books_genre(genre = "thriller"):
             "publisher": publisher
         }
     return books
+
+def get_books1(genre):
+    engine = create_engine(DATABASE_URI)
+    metadata = MetaData()
+
+    books_table = Table('books', metadata, autoload_with=engine)
+
+    with engine.connect() as connection:
+        stmt = books_table.select()
+        result = connection.execute(stmt).fetchall()
+
+        books_dict = {}
+        for book in result:
+            book_id, title, author, _, description, genres, publisher, _, _, cover = book
+            try:
+                genre_list = [g.strip().lower() for g in ast.literal_eval(genres)]
+            except Exception:
+                genre_list = []
+
+            if genre.lower() in genre_list:
+                books_dict[book_id] = {
+                    "title": title,
+                    "author": author,
+                    "description": description,
+                    "thumbnail": cover,
+                    "publisher": publisher
+                }
+
+        return books_dict
+
